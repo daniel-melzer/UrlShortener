@@ -59,6 +59,30 @@ class UrlShortener {
 	}
 
 	/**
+	 * Retrieves the long URL from the database.
+	 *
+	 * @param string $code
+	 * @return string
+	 * @throws \RuntimeException
+	 */
+	public function retrieveUrlByCode($code) {
+		$statement = $this->con->prepare('
+				SELECT
+					*
+				FROM
+					`url`
+				WHERE
+					`code` LIKE :code');
+		$statement->bindValue(':code', $code);
+		$result = $statement->execute()->fetchArray();
+		if(empty($result)) {
+			throw new \RuntimeException('Code not found');
+		}
+
+		return $result['url'];
+	}
+
+	/**
 	 * Inserts a new URL in the database.
 	 *
 	 * @param string $url
