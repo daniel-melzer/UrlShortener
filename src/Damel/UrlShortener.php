@@ -83,6 +83,32 @@ class UrlShortener {
 	}
 
 	/**
+	 * Retrieves all entries from the database.
+	 *
+	 * @return array
+	 * @throws \RuntimeException
+	 */
+	public function retrieveAll() {
+		$return = array();
+		$result = $this->con->query('
+				SELECT
+					*
+				FROM
+					`url`
+				ORDER BY
+					`created_at` DESC');
+		if(!($result instanceof \SQLite3Result)) {
+			throw new \RuntimeException('No URLs found');
+		}
+
+		while($row = $result->fetchArray()) {
+			$return[] = $row;
+		}
+
+		return $return;
+	}
+
+	/**
 	 * Inserts a new URL in the database.
 	 *
 	 * @param string $url
