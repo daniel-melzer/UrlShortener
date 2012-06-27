@@ -31,6 +31,23 @@ Flight::route('POST /', function() {
 	Flight::render('layout', array());
 });
 
+//List pages.
+Flight::route('GET /list/@page:[0-9]+', function($page) {
+	$shortener = Flight::shortener();
+	$list = $shortener->retrieveAll();
+
+	$elements = 25;
+	$offset = $elements * ($page - 1);
+	$pageList = array_slice($list, $offset, $elements);
+
+	Flight::render('list', array(
+			'list' => $pageList,
+			'currentPage' => $page,
+			'numPages' => ceil(count($list) / $elements)
+	), 'content');
+	Flight::render('layout', array());
+});
+
 //Redirect URL.
 Flight::route('GET /@code:[a-zA-Z0-9]{4,}', function($code) {
 	$shortener = Flight::shortener();
