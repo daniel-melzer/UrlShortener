@@ -30,3 +30,16 @@ Flight::route('POST /', function() {
 	}
 	Flight::render('layout', array());
 });
+
+//Redirect URL.
+Flight::route('/@code:[a-zA-Z0-9]', function($code) {
+	$shortener = Flight::shortener();
+	try {
+		$url = $shortener->retrieveUrlByCode($code);
+		if($url) {
+			Flight::redirect($url);
+		}
+	} catch(\RuntimeException $e) {
+		Flight::halt(404, 'URL not found');
+	}
+});
