@@ -32,7 +32,7 @@ Flight::route('POST /', function() {
 });
 
 //Redirect URL.
-Flight::route('/@code:[a-zA-Z0-9]', function($code) {
+Flight::route('GET /@code:[a-zA-Z0-9]{4,}', function($code) {
 	$shortener = Flight::shortener();
 	try {
 		$url = $shortener->retrieveUrlByCode($code);
