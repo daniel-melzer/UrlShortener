@@ -1,31 +1,30 @@
 <div class="row">
-	<div class="span6 offset3">
+	<div class="span4 offset4">
 		<h1>Welcome to UrlShortener</h1>
-		<h2>A simple URL shortener based on Flight</h2>
-		<p>To add a new URL to be shortened, use the following form.</p>
-		<form class="form-horizontal well" action="add" method="post">
+<?php if(!empty($error)): ?>
+		<div class="alert alert-error">
+			<b>Oops, something went wrong!</b><br>
+			<?=$error?>
+		</div>
+<?php endif; ?>
+		<form class="form well" action="" method="post">
 			<div class="control-group">
-				<label class="control-label" for="input01">URL</label>
+				<label class="control-label" for="url">Paste your long URL here:</label>
 				<div class="controls">
-					<input type="text" class="input-xlarge" id="input01">
+					<input type="text" name="url" class="input-xlarge" id="url" value="<?=$url?>">
 				</div>
 			</div>
 			<div class="control-group">
-				<label class="control-label" for="input02">Custom code</label>
+				<label class="control-label" for="code">Optional custom shortcode:</label>
 				<div class="controls">
-					<input type="text" class="input-xlarge" id="input02">
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label" for="input03">Result</label>
-				<div class="controls">
-					<input type="text" class="input-xlarge" id="input03" value="<?=$_SERVER['PHP_SELF'] . '/code'?>">
+					<input type="text" name="code" class="input-xlarge" id="code" value="<?=$code?>">
 				</div>
 			</div>
 			<div class="form-actions">
-				<button type="submit" class="btn">Save</button>
+				<button type="submit" class="btn btn-primary">Shorten URL</button>
 			</div>
 		</form>
+		<p>All URLs are public and can be accessed by anyone.</p>
 	</div>
 </div>
 
