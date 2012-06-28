@@ -34,6 +34,7 @@ class UrlShortener {
 	 * @throws \InvalidArgumentException
 	 */
 	public function addUrl($url, $code = null) {
+		$isCustom = false;
 		if(!filter_var($url, FILTER_VALIDATE_URL)) {
 			throw new \InvalidArgumentException('URL invalid');
 		}
@@ -55,11 +56,13 @@ class UrlShortener {
 			if(!empty($result)) {
 				throw new \InvalidArgumentException('Code already in use');
 			}
+
+			$isCustom = true;
 		} else {
 			$code = $this->generateCode();
 		}
 
-		return $this->storeUrl($url, $code);
+		return $this->storeUrl($url, $code, $isCustom);
 	}
 
 	/**
@@ -117,16 +120,18 @@ class UrlShortener {
 	 *
 	 * @param string $url
 	 * @param string $code
+	 * @param bool $isCustom
 	 * @return bool|string
 	 */
-	private function storeUrl($url, $code) {
+	private function storeUrl($url, $code, $isCustom = false) {
 		$statement = $this->con->prepare('
 				INSERT INTO
 					`url`
-				VALUES(:code, :url, :created_at)');
+				VALUES(:code, :url, :created_at, :custom)');
 		$statement->bindValue(':code', $code);
 		$statement->bindValue(':url', $url);
 		$statement->bindValue(':created_at', date('Y-m-d H:i:s'));
+		$statement->bindValue(':custom', (int)$isCustom);
 
 		if(!$statement->execute()) {
 			return false;
