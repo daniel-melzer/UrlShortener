@@ -158,9 +158,9 @@ class UrlShortener {
 				INSERT INTO
 					`url`
 				VALUES(:code, :url, :created_at, :custom)');
-		$statement->bindValue(':code', $code);
-		$statement->bindValue(':url', $url);
-		$statement->bindValue(':created_at', date('Y-m-d H:i:s'));
+		$statement->bindValue(':code', $this->con->escapeString($code));
+		$statement->bindValue(':url', $this->con->escapeString($url));
+		$statement->bindValue(':created_at', $this->con->escapeString(date('Y-m-d H:i:s')));
 		$statement->bindValue(':custom', (int)$isCustom);
 
 		if(!$statement->execute()) {
