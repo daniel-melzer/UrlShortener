@@ -90,6 +90,31 @@ class UrlShortener {
 	}
 
 	/**
+	 * Retrieves the non-custom code from the database.
+	 *
+	 * @param string $url
+	 * @return string
+	 * @throws \RuntimeException
+	 */
+	public function retrieveCodeByUrl($url) {
+		$statement = $this->con->prepare('
+				SELECT
+					*
+				FROM
+					`url`
+				WHERE
+					`url` LIKE :url
+					AND `custom` = 0');
+		$statement->bindValue(':url', $this->con->escapeString($url));
+		$result = $statement->execute()->fetchArray();
+		if(empty($result)) {
+			throw new \RuntimeException('URL not found');
+		}
+
+		return $result['code'];
+	}
+
+	/**
 	 * Retrieves all entries from the database.
 	 *
 	 * @return array
