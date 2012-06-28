@@ -18,6 +18,7 @@
 				<label class="control-label" for="code">Optional custom shortcode:</label>
 				<div class="controls">
 					<input type="text" name="code" class="input-xlarge" id="code" value="<?=$code?>">
+					<p class="help-block">Minimum 4 characters.</p>
 				</div>
 			</div>
 			<div class="form-actions">
