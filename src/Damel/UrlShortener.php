@@ -38,7 +38,11 @@ class UrlShortener {
 			throw new \InvalidArgumentException('URL invalid');
 		}
 
-		if(!is_string($code) && !empty($code)) {
+		if(is_string($code) && !empty($code)) {
+			if(4 > strlen($code)) {
+				throw new \InvalidArgumentException('Code must be at least 4 characters long');
+			}
+
 			$statement = $this->con->prepare('
 					SELECT
 						*
@@ -47,7 +51,7 @@ class UrlShortener {
 					WHERE
 						`code` LIKE :code');
 			$statement->bindValue(':code', $code);
-			$result = $statement->execute();
+			$result = $statement->execute()->fetchArray();
 			if(!empty($result)) {
 				throw new \InvalidArgumentException('Code already in use');
 			}
