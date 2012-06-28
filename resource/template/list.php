@@ -27,7 +27,7 @@
 				<a href="/list/<?=$currentPage - 1;?>">Newer</a>
 			</li>
 <?php endif; ?>
-<?php if($numPages == $currentPage): ?>
+<?php if($numPages <= $currentPage): ?>
 			<li class="next disabled"><a>Older</a></li>
 <?php else: ?>
 			<li class="next">

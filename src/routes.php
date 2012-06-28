@@ -35,15 +35,22 @@ Flight::route('POST /', function() {
 Flight::route('GET /list/@page:[0-9]+', function($page) {
 	$shortener = Flight::shortener();
 	$list = $shortener->retrieveAll();
-
 	$elements = 25;
+	$numPages = ceil(count($list) / $elements);
+
+	if(1 > $page || 0 == $numPages) {
+		$page = 1;
+	} elseif(0 < $numPages && $numPages < $page) {
+		$page = $numPages;
+	}
+
 	$offset = $elements * ($page - 1);
 	$pageList = array_slice($list, $offset, $elements);
 
 	Flight::render('list', array(
 			'list' => $pageList,
 			'currentPage' => $page,
-			'numPages' => ceil(count($list) / $elements)
+			'numPages' => $numPages
 	), 'content');
 	Flight::render('layout', array());
 });
