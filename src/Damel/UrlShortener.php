@@ -153,6 +153,7 @@ class UrlShortener {
 	 * @return bool|string
 	 */
 	private function storeUrl($url, $code, $isCustom = false) {
+		$return = $code;
 		$statement = $this->con->prepare('
 				INSERT INTO
 					`url`
@@ -163,10 +164,10 @@ class UrlShortener {
 		$statement->bindValue(':custom', (int)$isCustom);
 
 		if(!$statement->execute()) {
-			return false;
+			$return = false;
 		}
 
-		return $code;
+		return $return;
 	}
 
 	/**
