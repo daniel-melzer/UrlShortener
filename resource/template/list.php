@@ -13,7 +13,7 @@
 <?php foreach($list as $url): ?>
 				<tr>
 					<td><?=$url['code'];?></td>
-					<td><?=$url['url'];?></td>
+					<td><a href="<?=$url['url'];?>"><?=$url['url'];?></a></td>
 					<td><?=$url['created_at'];?></td>
 				</tr>
 <?php endforeach; ?>
