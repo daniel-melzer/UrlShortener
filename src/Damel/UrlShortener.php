@@ -34,7 +34,7 @@ class UrlShortener {
 	 * @throws \InvalidArgumentException
 	 */
 	public function addUrl($url, $code = null) {
-		$isCustom = false;
+		$return = false;
 		if(!filter_var($url, FILTER_VALIDATE_URL)) {
 			throw new \InvalidArgumentException('URL invalid');
 		}
@@ -57,12 +57,16 @@ class UrlShortener {
 				throw new \InvalidArgumentException('Code already in use');
 			}
 
-			$isCustom = true;
+			$return = $this->storeUrl($url, $code, true);
 		} else {
-			$code = $this->generateCode();
+			$return = $this->retrieveCodeByUrl($url);
+			if(!$return) {
+				$code = $this->generateCode();
+				$return = $this->storeUrl($url, $code);
+			}
 		}
 
-		return $this->storeUrl($url, $code, $isCustom);
+		return $return;
 	}
 
 	/**
