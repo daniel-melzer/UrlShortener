@@ -60,7 +60,7 @@ class UrlShortener {
 			$return = $this->storeUrl($url, $code, true);
 		} else {
 			$return = $this->retrieveCodeByUrl($url);
-			if(!$return) {
+			if('' == $return) {
 				$code = $this->generateCode();
 				$return = $this->storeUrl($url, $code);
 			}
@@ -98,12 +98,12 @@ class UrlShortener {
 	 *
 	 * @param string $url
 	 * @return string
-	 * @throws \RuntimeException
 	 */
 	public function retrieveCodeByUrl($url) {
+		$code = '';
 		$statement = $this->con->prepare('
 				SELECT
-					*
+					`code`
 				FROM
 					`url`
 				WHERE
@@ -112,10 +112,10 @@ class UrlShortener {
 		$statement->bindValue(':url', $this->con->escapeString($url));
 		$result = $statement->execute()->fetchArray();
 		if(empty($result)) {
-			throw new \RuntimeException('URL not found');
+			$code = $result['code'];
 		}
 
-		return $result['code'];
+		return $code;
 	}
 
 	/**
