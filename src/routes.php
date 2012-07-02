@@ -20,7 +20,7 @@ Flight::route('POST /', function() {
 		Flight::render('index', array(
 				'url' => $request->data->url,
 				'code' => $request->data->code,
-				'error' => $result
+				'errors' => $result
 		), 'content');
 	}
 	Flight::render('layout', array());
