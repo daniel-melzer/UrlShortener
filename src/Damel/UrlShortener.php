@@ -74,23 +74,23 @@ class UrlShortener {
 	 *
 	 * @param string $code
 	 * @return string
-	 * @throws \RuntimeException
 	 */
 	public function retrieveUrlByCode($code) {
+		$url = '';
 		$statement = $this->con->prepare('
 				SELECT
-					*
+					`url`
 				FROM
 					`url`
 				WHERE
 					`code` LIKE :code');
-		$statement->bindValue(':code', $code);
+		$statement->bindValue(':code', $this->con->escapeString($code));
 		$result = $statement->execute()->fetchArray();
-		if(empty($result)) {
-			throw new \RuntimeException('Code not found');
+		if(!empty($result)) {
+			$url = $result['url'];
 		}
 
-		return $result['url'];
+		return $url;
 	}
 
 	/**
@@ -111,7 +111,7 @@ class UrlShortener {
 					AND `custom` = 0');
 		$statement->bindValue(':url', $this->con->escapeString($url));
 		$result = $statement->execute()->fetchArray();
-		if(empty($result)) {
+		if(!empty($result)) {
 			$code = $result['code'];
 		}
 
