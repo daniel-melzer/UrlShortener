@@ -58,12 +58,10 @@ Flight::route('GET /list/@page:[0-9]+', function($page) {
 //Redirect URL.
 Flight::route('GET /@code:[a-zA-Z0-9]{4,}', function($code) {
 	$shortener = Flight::shortener();
-	try {
-		$url = $shortener->retrieveUrlByCode($code);
-		if($url) {
-			Flight::redirect($url);
-		}
-	} catch(\RuntimeException $e) {
+	$url = $shortener->retrieveUrlByCode($code);
+	if(!empty($url)) {
+		Flight::redirect($url);
+	} else {
 		Flight::halt(404, 'URL not found');
 	}
 });
