@@ -176,28 +176,26 @@ class UrlShortener {
 	 * @return string
 	 */
 	private function generateCode() {
-		$in = rand();
-		$padUp = 4;
-		$index = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		$random = rand();
+		$code = '';
+		$minLength = 4;
+		$index = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		$base = strlen($index);
 
-		if(is_numeric($padUp)) {
-			$padUp--;
-			if(0 < $padUp) {
-				$in += pow($base, $padUp);
-			}
+		$minLength--;
+		if(0 < $minLength) {
+			$random += pow($base, $minLength);
 		}
 
-		$out = "";
-		for($t = floor(log($in, $base)); $t >= 0; $t--) {
+		for($t = floor(log($random, $base)); 0 <= $t; $t--) {
 			$bcp = bcpow($base, $t);
-			$a = floor($in / $bcp) % $base;
-			$out = $out . substr($index, $a, 1);
-			$in = $in - ($a * $bcp);
+			$start = floor($random / $bcp) % $base;
+			$code = $code . substr($index, $start, 1);
+			$random = $random - ($start * $bcp);
 		}
-		$out = strrev($out);
+		$code = strrev($code);
 
-		return $out;
+		return $code;
 	}
 
 }
