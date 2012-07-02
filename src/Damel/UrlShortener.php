@@ -122,7 +122,6 @@ class UrlShortener {
 	 * Retrieves all entries from the database.
 	 *
 	 * @return array
-	 * @throws \RuntimeException
 	 */
 	public function retrieveAll() {
 		$return = array();
@@ -133,12 +132,10 @@ class UrlShortener {
 					`url`
 				ORDER BY
 					`created_at` DESC');
-		if(!($result instanceof \SQLite3Result)) {
-			throw new \RuntimeException('No URLs found');
-		}
-
-		while($row = $result->fetchArray()) {
-			$return[] = $row;
+		if($result instanceof \SQLite3Result) {
+			while($row = $result->fetchArray()) {
+				$return[] = $row;
+			}
 		}
 
 		return $return;
