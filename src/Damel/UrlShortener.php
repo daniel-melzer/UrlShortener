@@ -30,39 +30,20 @@ class UrlShortener {
 	 *
 	 * @param string $url
 	 * @param null|string $code
-	 * @return bool|string
-	 * @throws \InvalidArgumentException
+	 * @return array|string
 	 */
 	public function addUrl($url, $code = null) {
-		$return = false;
-		if(!filter_var($url, FILTER_VALIDATE_URL)) {
-			throw new \InvalidArgumentException('URL invalid');
-		}
+		$return = $this->validateForm($url, $code);
 
-		if(is_string($code) && !empty($code)) {
-			if(4 > strlen($code)) {
-				throw new \InvalidArgumentException('Code must be at least 4 characters long');
-			}
-
-			$statement = $this->con->prepare('
-					SELECT
-						*
-					FROM
-						`url`
-					WHERE
-						`code` LIKE :code');
-			$statement->bindValue(':code', $this->con->escapeString($code));
-			$result = $statement->execute()->fetchArray();
-			if(!empty($result)) {
-				throw new \InvalidArgumentException('Code already in use');
-			}
-
-			$return = $this->storeUrl($url, $code, true);
-		} else {
-			$return = $this->retrieveCodeByUrl($url);
-			if('' == $return) {
-				$code = $this->generateCode();
-				$return = $this->storeUrl($url, $code);
+		if(true === $return) {
+			if(is_string($code) && !empty($code)) {
+				$return = $this->storeUrl($url, $code, true);
+			} else {
+				$return = $this->retrieveCodeByUrl($url);
+				if('' == $return) {
+					$code = $this->generateCode();
+					$return = $this->storeUrl($url, $code);
+				}
 			}
 		}
 
@@ -193,6 +174,34 @@ class UrlShortener {
 		$code = strrev($code);
 
 		return $code;
+	}
+
+	/**
+	 * Validates the form data.
+	 *
+	 * @param string $url
+	 * @param string|null $code
+	 * @return bool|array
+	 */
+	private function validateForm($url, $code) {
+		$errors = array();
+
+		if(empty($url) || !filter_var($url, FILTER_VALIDATE_URL)) {
+			$errors['url'] = 'URL invalid';
+		}
+
+		if(is_string($code) && !empty($code)) {
+			if(4 > strlen($code)) {
+				$errors['code'] = 'Code must be at least 4 characters long';
+			} else {
+				$result = $this->retrieveUrlByCode($code);
+				if('' != $result) {
+					$errors['code'] = 'Code already in use';
+				}
+			}
+		}
+
+		return empty($errors) ?: $errors;
 	}
 
 }
