@@ -51,7 +51,7 @@ class UrlShortener {
 						`url`
 					WHERE
 						`code` LIKE :code');
-			$statement->bindValue(':code', $code);
+			$statement->bindValue(':code', $this->con->escapeString($code));
 			$result = $statement->execute()->fetchArray();
 			if(!empty($result)) {
 				throw new \InvalidArgumentException('Code already in use');
