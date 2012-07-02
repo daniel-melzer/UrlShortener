@@ -10,7 +10,7 @@ Flight::route('POST /', function() {
 	$request = Flight::request();
 	$shortener = Flight::shortener();
 	try {
-		$result = $shortener->addUrl(Flight::request()->data->url, Flight::request()->data->code);
+		$result = $shortener->addUrl($request->data->url, $request->data->code);
 	} catch(\InvalidArgumentException $e) {
 		$error = $e->getMessage();
 	}
@@ -19,13 +19,13 @@ Flight::route('POST /', function() {
 		$shortUrl = (isset($_SERVER['SERVER_PORT']) && (80 != $_SERVER['SERVER_PORT']) ?
 				'https' : 'http') . '://' . $_SERVER['SERVER_NAME'] . '/' . $result;
 		Flight::render('url', array(
-			'shortUrl' => $shortUrl
+				'shortUrl' => $shortUrl
 		), 'content');
 	} else {
 		Flight::render('index', array(
-			'url' => Flight::request()->data->url,
-			'code' => Flight::request()->data->code,
-			'error' => $error
+				'url' => $request->data->url,
+				'code' => $request->data->code,
+				'error' => $error
 		), 'content');
 	}
 	Flight::render('layout', array());
