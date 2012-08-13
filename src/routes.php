@@ -1,4 +1,10 @@
 <?php
+//404 page.
+Flight::map('notFound', function() {
+	Flight::render('404', array(), 'content');
+	Flight::render('layout', array());
+});
+
 //Index page.
 Flight::route('GET /', function() {
 	Flight::render('index', array(), 'content');
@@ -57,6 +63,6 @@ Flight::route('GET /@code:[a-zA-Z0-9]{4,}', function($code) {
 	if(!empty($url)) {
 		Flight::redirect($url);
 	} else {
-		Flight::halt(404, 'URL not found');
+		Flight::notFound();
 	}
 });
