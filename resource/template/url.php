@@ -3,7 +3,7 @@
 		<h1>You're done</h1>
 		<p>Here is your new URL.</p>
 		<div class="control-group">
-			<input class="input-xlarge" type="text" value="<?=$shortUrl?>" readonly>
+			<input class="input-xlarge" type="text" value="<?php echo $shortUrl; ?>" readonly>
 		</div>
 	</div>
 </div>
