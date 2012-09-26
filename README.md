@@ -11,3 +11,9 @@ Installation
 2. Download a .zip file of the UrlShortener
 3. Upload the contents of the .zip file to your web server
 4. Check the directory and file permissions of resource/sqlite/urlshortener.sqlite
+
+Contributors
+------------
+
+*  Marc Löhe
+    https://github.com/boundaryfunctions
