@@ -1,4 +1,10 @@
 <?php
+//404 page.
+Flight::map('notFound', function() {
+	Flight::render('404', array(), 'content');
+	Flight::render('layout', array());
+});
+
 //Index page.
 Flight::route('GET /', function() {
 	Flight::render('index', array(), 'content');
@@ -28,25 +34,9 @@ Flight::route('POST /', function() {
 
 //List pages.
 Flight::route('GET /list/@page:[0-9]+', function($page) {
-	$shortener = Flight::shortener();
-	$list = $shortener->retrieveAll();
-	$elements = 25;
-	$numPages = ceil(count($list) / $elements);
-
-	if(1 > $page || 0 == $numPages) {
-		$page = 1;
-	} elseif(0 < $numPages && $numPages < $page) {
-		$page = $numPages;
-	}
-
-	$offset = $elements * ($page - 1);
-	$pageList = array_slice($list, $offset, $elements);
-
-	Flight::render('list', array(
-			'list' => $pageList,
-			'currentPage' => $page,
-			'numPages' => $numPages
-	), 'content');
+	$entriesPerPage = 25;
+	$page = Flight::shortener()->retrievePage($page, $entriesPerPage);
+	Flight::render('list', $page, 'content');
 	Flight::render('layout', array());
 });
 
@@ -57,6 +47,6 @@ Flight::route('GET /@code:[a-zA-Z0-9]{4,}', function($code) {
 	if(!empty($url)) {
 		Flight::redirect($url);
 	} else {
-		Flight::halt(404, 'URL not found');
+		Flight::notFound();
 	}
 });
