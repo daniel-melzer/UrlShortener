@@ -34,7 +34,7 @@ Flight::route('POST /', function() {
 
 //List pages.
 Flight::route('GET /list/@page:[0-9]+', function($page) {
-  $entriesPerPage = 25;
+	$entriesPerPage = 25;
 	$page = Flight::shortener()->retrievePage($page, $entriesPerPage);
 	Flight::render('list', $page, 'content');
 	Flight::render('layout', array());

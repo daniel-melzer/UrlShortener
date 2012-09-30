@@ -122,61 +122,64 @@ class UrlShortener {
 		return $return;
 	}
 
-  /**
-   * Retrieve all entries from database within a page.
-   *
-   * @var int $page
-   * @var int $elements Number of entries per page
-   * @return array
-   */
-  public function retrievePage($page = 1, $elements = 25) {
-    $numEntries = $this->countEntries();
-    $numPages = ceil($numEntries / $elements);
-	  if(1 > $page || 0 == $numPages) {
-		  $page = 1;
-	  } elseif(0 < $numPages && $numPages < $page) {
-		  $page = $numPages;
-	  }
-	  $offset = $elements * ($page - 1);
-	  $page = array(
-	    'currentPage' => $page,
-	    'numPages' => $numPages,
-	    'entries' => array()
-	  );
-	  $query = $this->con->prepare('
-	      SELECT
-	        *
-	      FROM
-	        `url`
-	      ORDER BY
-	        `created_at` DESC
-	      LIMIT
-	        :offset, :limit');
-	  $query->bindValue(':offset', $offset);
-	  $query->bindValue(':limit', $elements);
-	  if($result = $query->execute()) {
-		  if($result instanceof \SQLite3Result) {
-			  while($row = $result->fetchArray()) {
-				  $page['entries'][] = $row;
-			  }
-		  }
+	/**
+	 * Retrieve all entries from database within a page.
+	 *
+	 * @param int $page
+	 * @param int $elements Number of entries per page
+	 * @return array
+	 */
+	public function retrievePage($page = 1, $elements = 25) {
+		$numEntries = $this->countEntries();
+		$numPages = ceil($numEntries / $elements);
+		if(1 > $page || 0 == $numPages) {
+			$page = 1;
+		} elseif(0 < $numPages && $numPages < $page) {
+			$page = $numPages;
 		}
-    return $page;
-  }
+		$offset = $elements * ($page - 1);
+		$page = array(
+				'currentPage' => $page,
+				'numPages' => $numPages,
+				'entries' => array()
+		);
+		$query = $this->con->prepare('
+				SELECT
+					*
+				FROM
+					`url`
+				ORDER BY
+					`created_at` DESC
+				LIMIT
+					:offset, :limit');
+		$query->bindValue(':offset', $offset);
+		$query->bindValue(':limit', $elements);
+
+		if($result = $query->execute()) {
+			if($result instanceof \SQLite3Result) {
+				while($row = $result->fetchArray()) {
+					$page['entries'][] = $row;
+				}
+			}
+		}
+
+		return $page;
+	}
   
-  /**
-   * Retrieve the number of all entries in the database.
-   *
-   * @return int
-   */
-  private function countEntries() {
-    $count = $this->con->querySingle('
-        SELECT COUNT
-          (`code`)
-        FROM
-          `url`');
-    return intval($count);
-  }
+	/**
+	 * Retrieve the number of all entries in the database.
+	 *
+	 * @return int
+	 */
+  	private function countEntries() {
+    	$count = $this->con->querySingle('
+        		SELECT COUNT
+          			(`code`)
+        		FROM
+          			`url`');
+
+		return (int)$count;
+	}
 
 	/**
 	 * Inserts a new URL in the database.
