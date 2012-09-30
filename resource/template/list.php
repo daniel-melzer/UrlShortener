@@ -10,7 +10,7 @@
 				</tr>
 			</thead>
 			<tbody>
-<?php foreach($list as $url): ?>
+<?php foreach($entries as $url): ?>
 				<tr>
 					<td><?php echo $url['code']; ?></td>
 					<td><a href="<?php echo $url['url']; ?>"><?php echo $url['url']; ?></a></td>
