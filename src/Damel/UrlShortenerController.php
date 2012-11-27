@@ -62,7 +62,7 @@ class UrlShortenerController {
 	/**
 	 * Fetch entries for given list page and renders it.
 	 *
-	 * @param $page
+	 * @param int $page
 	 * @return null
 	 */
 	public function listAction($page) {
@@ -72,9 +72,17 @@ class UrlShortenerController {
 		$this->render('list', $entries);
 	}
 
+	/**
+	 * Tries to fetch an URL by its code and redirects.
+	 *
+	 * Triggers 404 if URL couldn't be found.
+	 *
+	 * @param string $code
+	 * @return null
+	 */
 	public function redirectAction($code) {
-		$shortener = \Flight::shortener();
-		$url = $shortener->retrieveUrlByCode($code);
+		$url = $this->model->retrieveUrlByCode($code);
+
 		if(!empty($url)) {
 			\Flight::redirect($url);
 		} else {
