@@ -31,25 +31,30 @@ class UrlShortenerController {
 		$this->render('index', array());
 	}
 
-	public function saveAction() {
-		$request = \Flight::request();
-		$shortener = \Flight::shortener();
-		$result = $shortener->addUrl($request->data->url, $request->data->code);
+	/**
+	 * Tries to save a new entry.
+	 *
+	 * @param \Flight\net\Request $request
+	 * @return null
+	 */
+	public function saveAction(\Flight\net\Request $request) {
+		$result = $this->model->addUrl($request->data->url, $request->data->code);
 
 		if(is_string($result)) {
 			$shortUrl = (isset($_SERVER['SERVER_PORT']) && (80 != $_SERVER['SERVER_PORT']) ?
 					'https' : 'http') . '://' . $_SERVER['SERVER_NAME'] . '/' . $result;
-			\Flight::render('url', array(
-					'shortUrl' => $shortUrl
-			), 'content');
+			$template = 'url';
+			$data = array('shortUrl' => $shortUrl);
 		} else {
-			\Flight::render('index', array(
-				'url' => $request->data->url,
-				'code' => $request->data->code,
-				'errors' => $result
-			), 'content');
+			$template = 'index';
+			$data = array(
+					'url' => $request->data->url,
+					'code' => $request->data->code,
+					'errors' => $result
+			);
 		}
-		\Flight::render('layout', array());
+
+		$this->render($template, $data);
 	}
 
 	public function listAction($page) {
