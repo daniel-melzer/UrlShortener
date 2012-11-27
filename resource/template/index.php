@@ -1,5 +1,5 @@
 <div class="row">
-	<div class="span4 offset4">
+	<div class="span6 offset3">
 		<h1>Welcome to UrlShortener</h1>
 <?php if(!empty($errors)): ?>
 		<div class="alert alert-error">
@@ -11,13 +11,13 @@
 			<div class="control-group<?php if(isset($errors['url'])): ?> error<?php endif; ?>">
 				<label class="control-label" for="url">Paste your long URL here:</label>
 				<div class="controls">
-					<input type="text" name="url" class="input-xlarge" id="url" value="<?php echo $url; ?>">
+					<input type="text" name="url" class="span5" id="url" value="<?php echo $url; ?>">
 				</div>
 			</div>
 			<div class="control-group<?php if(isset($errors['code'])): ?> error<?php endif; ?>">
 				<label class="control-label" for="code">Optional custom shortcode:</label>
 				<div class="controls">
-					<input type="text" name="code" class="input-xlarge" id="code" value="<?php echo $code; ?>">
+					<input type="text" name="code" class="span5" id="code" value="<?php echo $code; ?>">
 					<p class="help-block">Minimum 4 characters.</p>
 				</div>
 			</div>
