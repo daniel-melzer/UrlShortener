@@ -91,6 +91,15 @@ class UrlShortenerController {
 	}
 
 	/**
+	 * Renders 404 page.
+	 *
+	 * @return null
+	 */
+	public function notFoundAction() {
+		$this->render('404', array());
+	}
+
+	/**
 	 * Render page content.
 	 *
 	 * Calls \Flight::render() with given template first, then calls it
