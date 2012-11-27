@@ -34,6 +34,8 @@ class UrlShortenerController {
 	/**
 	 * Tries to save a new entry.
 	 *
+	 * Renders form if errors occured, else renders shortened URL.
+	 *
 	 * @param \Flight\net\Request $request
 	 * @return null
 	 */
@@ -57,11 +59,17 @@ class UrlShortenerController {
 		$this->render($template, $data);
 	}
 
+	/**
+	 * Fetch entries for given list page and renders it.
+	 *
+	 * @param $page
+	 * @return null
+	 */
 	public function listAction($page) {
 		$entriesPerPage = 25;
-		$page = \Flight::shortener()->retrievePage($page, $entriesPerPage);
-		\Flight::render('list', $page, 'content');
-		\Flight::render('layout', array());
+		$entries = $this->model->retrievePage($page, $entriesPerPage);
+
+		$this->render('list', $entries);
 	}
 
 	public function redirectAction($code) {
