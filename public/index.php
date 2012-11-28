@@ -1,13 +1,14 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', true);
+define('DOCUMENT_ROOT', __DIR__ . '/..');
 
-require __DIR__ . '/../vendor/flight/Flight.php';
-require __DIR__ . '/../src/routes.php';
-require __DIR__ . '/../src/Damel/UrlShortener.php';
-require __DIR__ . '/../src/Damel/UrlShortenerController.php';
+require DOCUMENT_ROOT . '/vendor/flight/Flight.php';
+require DOCUMENT_ROOT . '/app/config/routes.php';
+require DOCUMENT_ROOT . '/src/Damel/models/UrlShortener.php';
+require DOCUMENT_ROOT . '/src/Damel/controller/UrlShortenerController.php';
 
-Flight::set('flight.views.path', __DIR__ . '/../resource/template');
+Flight::set('flight.views.path', DOCUMENT_ROOT . '/app/resource/template');
 Flight::register('shortener', '\Damel\UrlShortenerController', array(
 		new \Damel\UrlShortener()
 ));

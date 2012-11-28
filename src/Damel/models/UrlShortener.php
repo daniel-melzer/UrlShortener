@@ -6,7 +6,7 @@ namespace Damel;
 class UrlShortener {
 
 
-	const DATABASE_NAME = 'resource/sqlite/urlshortener.sqlite';
+	const DATABASE_NAME = 'app/resource/sqlite/urlshortener.sqlite';
 
 
 	/**
@@ -21,7 +21,7 @@ class UrlShortener {
 	 * @return UrlShortener
 	 */
 	public function __construct() {
-		$dsn = __DIR__ . '/../../' . self::DATABASE_NAME;
+		$dsn = DOCUMENT_ROOT . '/' . self::DATABASE_NAME;
 		$this->con = new \SQLite3($dsn, SQLITE3_OPEN_READWRITE);
 	}
 
