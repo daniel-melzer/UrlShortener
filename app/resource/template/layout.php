@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>UrlShortener</title>
+		<title><?php echo $siteName; ?></title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="description" content="">
 		<meta name="author" content="">
@@ -38,7 +38,7 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</a>
-					<a class="brand" href="/">UrlShortener</a>
+					<a class="brand" href="/"><?php echo $siteName; ?></a>
 					<div class="nav-collapse">
 						<ul class="nav">
 							<li<?php if(false === strpos($_SERVER['REQUEST_URI'], 'list')): ?> class="active"<?php endif; ?>><a href="/">Home</a></li>

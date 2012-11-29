@@ -1,6 +1,6 @@
 <div class="row">
 	<div class="span6 offset3">
-		<h1>Welcome to UrlShortener</h1>
+		<h1>Welcome to <?php echo $siteName; ?></h1>
 <?php if(!empty($errors)): ?>
 		<div class="alert alert-error">
 			<b>Oops, something went wrong!</b><br>

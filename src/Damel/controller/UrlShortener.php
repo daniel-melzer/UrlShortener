@@ -11,6 +11,16 @@ class UrlShortener {
 	 */
 	private $model = null;
 
+	/**
+	 * @var string
+	 */
+	private $siteName = 'UrlShortener';
+
+	/**
+	 * @var string
+	 */
+	private $siteUrl = '';
+
 
 	/**
 	 * Constructor.
@@ -20,6 +30,17 @@ class UrlShortener {
 	 */
 	public function __construct(\Damel\models\Url $model) {
 		$this->model = $model;
+
+		if(\Flight::has('site.name')) {
+			$this->siteName = \Flight::get('site.name');
+		}
+
+		if(\Flight::has('site.url')) {
+			$this->siteUrl = \Flight::get('site.url');
+		} else {
+			$this->siteUrl = (isset($_SERVER['SERVER_PORT']) && (80 != $_SERVER['SERVER_PORT']) ?
+					'https' : 'http') . '://' . $_SERVER['SERVER_NAME'];
+		}
 	}
 
 	/**
@@ -28,7 +49,9 @@ class UrlShortener {
 	 * @return null
 	 */
 	public function indexAction() {
-		$this->render('index', array());
+		$this->render('index', array(
+				'siteName' => $this->siteName
+		));
 	}
 
 	/**
@@ -43,8 +66,7 @@ class UrlShortener {
 		$result = $this->model->addUrl($request->data->url, $request->data->code);
 
 		if(is_string($result)) {
-			$shortUrl = (isset($_SERVER['SERVER_PORT']) && (80 != $_SERVER['SERVER_PORT']) ?
-					'https' : 'http') . '://' . $_SERVER['SERVER_NAME'] . '/' . $result;
+			$shortUrl = $this->siteUrl . '/' . $result;
 			$template = 'url';
 			$data = array('shortUrl' => $shortUrl);
 		} else {
@@ -52,7 +74,8 @@ class UrlShortener {
 			$data = array(
 					'url' => $request->data->url,
 					'code' => $request->data->code,
-					'errors' => $result
+					'errors' => $result,
+					'siteName' => $this->siteName
 			);
 		}
 
@@ -66,7 +89,7 @@ class UrlShortener {
 	 * @return null
 	 */
 	public function listAction($page) {
-		$entries = $this->model->retrievePage($page, \Flight::get('site.list_default_limit'));
+		$entries = $this->model->retrievePage($page, (int)\Flight::get('site.list_default_limit'));
 
 		$this->render('list', $entries);
 	}
@@ -110,7 +133,9 @@ class UrlShortener {
 	 */
 	private function render($template, array $data) {
 		\Flight::render($template, $data, 'content');
-		\Flight::render('layout', array());
+		\Flight::render('layout', array(
+				'siteName' => $this->siteName
+		));
 	}
 
 }
