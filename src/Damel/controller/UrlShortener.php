@@ -1,9 +1,9 @@
 <?php
 
-namespace Damel;
+namespace Damel\controller;
 
 
-class UrlShortenerController {
+class UrlShortener {
 
 
 	/**
@@ -11,15 +11,36 @@ class UrlShortenerController {
 	 */
 	private $model = null;
 
+	/**
+	 * @var string
+	 */
+	private $siteName = 'UrlShortener';
 
 	/**
-	 * constructor.
-	 *
-	 * @param UrlShortener $model
-	 * @return UrlShortenerController
+	 * @var string
 	 */
-	public function __construct(\Damel\UrlShortener $model) {
+	private $siteUrl = '';
+
+
+	/**
+	 * Constructor.
+	 *
+	 * @param \Damel\models\Url $model
+	 * @return Damel\controller\UrlShortener
+	 */
+	public function __construct(\Damel\models\Url $model) {
 		$this->model = $model;
+
+		if(\Flight::has('site.name')) {
+			$this->siteName = \Flight::get('site.name');
+		}
+
+		if(\Flight::has('site.url')) {
+			$this->siteUrl = \Flight::get('site.url');
+		} else {
+			$this->siteUrl = (isset($_SERVER['SERVER_PORT']) && (80 != $_SERVER['SERVER_PORT']) ?
+					'https' : 'http') . '://' . $_SERVER['SERVER_NAME'];
+		}
 	}
 
 	/**
@@ -28,7 +49,9 @@ class UrlShortenerController {
 	 * @return null
 	 */
 	public function indexAction() {
-		$this->render('index', array());
+		$this->render('index', array(
+				'siteName' => $this->siteName
+		));
 	}
 
 	/**
@@ -43,8 +66,7 @@ class UrlShortenerController {
 		$result = $this->model->addUrl($request->data->url, $request->data->code);
 
 		if(is_string($result)) {
-			$shortUrl = (isset($_SERVER['SERVER_PORT']) && (80 != $_SERVER['SERVER_PORT']) ?
-					'https' : 'http') . '://' . $_SERVER['SERVER_NAME'] . '/' . $result;
+			$shortUrl = $this->siteUrl . '/' . $result;
 			$template = 'url';
 			$data = array('shortUrl' => $shortUrl);
 		} else {
@@ -52,7 +74,8 @@ class UrlShortenerController {
 			$data = array(
 					'url' => $request->data->url,
 					'code' => $request->data->code,
-					'errors' => $result
+					'errors' => $result,
+					'siteName' => $this->siteName
 			);
 		}
 
@@ -66,8 +89,7 @@ class UrlShortenerController {
 	 * @return null
 	 */
 	public function listAction($page) {
-		$entriesPerPage = 25;
-		$entries = $this->model->retrievePage($page, $entriesPerPage);
+		$entries = $this->model->retrievePage($page, (int)\Flight::get('site.list_default_limit'));
 
 		$this->render('list', $entries);
 	}
@@ -111,7 +133,9 @@ class UrlShortenerController {
 	 */
 	private function render($template, array $data) {
 		\Flight::render($template, $data, 'content');
-		\Flight::render('layout', array());
+		\Flight::render('layout', array(
+				'siteName' => $this->siteName
+		));
 	}
 
 }

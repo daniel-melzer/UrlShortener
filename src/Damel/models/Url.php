@@ -1,12 +1,12 @@
 <?php
 
-namespace Damel;
+namespace Damel\models;
 
 
-class UrlShortener {
+class Url {
 
 
-	const DATABASE_NAME = 'resource/sqlite/urlshortener.sqlite';
+	const DATABASE_NAME = 'urlshortener.sqlite';
 
 
 	/**
@@ -18,10 +18,10 @@ class UrlShortener {
 	/**
 	 * Establishes a connection to the SQLite database.
 	 *
-	 * @return UrlShortener
+	 * @return Damel\models\Url
 	 */
 	public function __construct() {
-		$dsn = __DIR__ . '/../../' . self::DATABASE_NAME;
+		$dsn = SQLITE_DIR . '/' . self::DATABASE_NAME;
 		$this->con = new \SQLite3($dsn, SQLITE3_OPEN_READWRITE);
 	}
 
