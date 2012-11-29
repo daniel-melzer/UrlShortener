@@ -1,9 +1,9 @@
 <?php
 
-namespace Damel;
+namespace Damel\controller;
 
 
-class UrlShortenerController {
+class UrlShortener {
 
 
 	/**
@@ -13,12 +13,12 @@ class UrlShortenerController {
 
 
 	/**
-	 * constructor.
+	 * Constructor.
 	 *
-	 * @param UrlShortener $model
-	 * @return UrlShortenerController
+	 * @param \Damel\models\Url $model
+	 * @return Damel\controller\UrlShortener
 	 */
-	public function __construct(\Damel\UrlShortener $model) {
+	public function __construct(\Damel\models\Url $model) {
 		$this->model = $model;
 	}
 
@@ -66,8 +66,7 @@ class UrlShortenerController {
 	 * @return null
 	 */
 	public function listAction($page) {
-		$entriesPerPage = 25;
-		$entries = $this->model->retrievePage($page, $entriesPerPage);
+		$entries = $this->model->retrievePage($page, \Flight::get('site.list_default_limit'));
 
 		$this->render('list', $entries);
 	}
