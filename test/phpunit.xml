@@ -1,0 +1,7 @@
+<phpunit>
+    <testsuites>
+        <testsuite name="UrlShortener">
+            <file>test/Damel/models/Url.php</file>
+        </testsuite>
+    </testsuites>
+</phpunit>
