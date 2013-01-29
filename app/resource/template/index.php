@@ -11,13 +11,13 @@
 			<div class="control-group<?php if(isset($errors['url'])): ?> error<?php endif; ?>">
 				<label class="control-label" for="url">Paste your long URL here:</label>
 				<div class="controls">
-					<input type="text" name="url" class="span5" id="url" value="<?php echo $url; ?>">
+					<input type="text" name="url" class="span5" id="url" value="<?php if(isset($url)): echo $url; endif; ?>">
 				</div>
 			</div>
 			<div class="control-group<?php if(isset($errors['code'])): ?> error<?php endif; ?>">
 				<label class="control-label" for="code">Optional custom shortcode:</label>
 				<div class="controls">
-					<input type="text" name="code" class="span5" id="code" value="<?php echo $code; ?>">
+					<input type="text" name="code" class="span5" id="code" value="<?php if(isset($code)): echo $code; endif; ?>">
 					<p class="help-block">Minimum 4 characters.</p>
 				</div>
 			</div>
@@ -28,4 +28,3 @@
 		<p>All URLs are public and can be accessed by anyone.</p>
 	</div>
 </div>
-
