@@ -1,6 +1,6 @@
 <?php
 require DOCUMENT_ROOT . '/app/config/constants.php';
-require APP_DIR . '/autoloader.php';
+require VENDOR_DIR . '/autoload.php';
 
 //Register classes.
 \Flight::register('shortener', '\Damel\controller\UrlShortener', array(new \Damel\models\Url()));
