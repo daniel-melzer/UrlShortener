@@ -1,6 +1,22 @@
 {
+	"name": "damel/urlshortener",
+	"description": "A URL shortener based on the Flight micro-framework and Twitter Bootstrap.",
+	"version": "0.3.0-dev",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Daniel Melzer",
+			"email": "daniel@melzer.ws",
+			"homepage": "http://daniel.melzer.ws",
+			"role": "Developer"
+		}
+	],
+	"support": {
+		"issues": "https://github.com/daniel-melzer/UrlShortener/issues"
+	},
 	"require": {
-		"php": ">=5.3.0",
+		"php": ">=5.3.2",
+		"ext-sqlite3": "*",
 		"mikecao/flight": "dev-master"
 	},
 	"autoload": {
